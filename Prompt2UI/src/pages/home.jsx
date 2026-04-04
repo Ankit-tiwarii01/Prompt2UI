@@ -1,12 +1,13 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 
-const Home = () => {
+const home = () => {
   return (
     <>
-    <p>This is para</p>
+    <Navbar/>
+    home
     </>
   )
 }
 
-export default Home
+export default home
