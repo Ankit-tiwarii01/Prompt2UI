@@ -17,15 +17,14 @@ const Home = () => {
 
       <div className="flex items-center justify-between px-[100px] gap-[30px]">
         
-        <div className="w-[50%] h-[80vh] bg-[#141319] mt-5 p-[20px]">
-          <h3 className="text-[25px] Font-semibold sp-text">
+        <div className="w-[50%] h-[80vh] bg-[#141319] mt-[5px] p-[20px]">
+          <h3 className="text-[25px] Font-semibold sp-text mt-[10px]">
             AI Component Generator
           </h3>
-          <p className="text-[gray] mt-2 text-[16px]">Please Describe your Component  </p>
-          <p className='text-[15px] font-[700] mt-4'>Framework</p>
+          <p className="text-[gray] mt-[2px] text-[16px]">Please Describe your Component  </p>
+          <p className='text-[15px] font-[700] mt-[4px]'>Framework</p>
           <Select
-          //padding in line 
-            className='mt-2'
+            className='m-[20px] bg-green-200'
             options={options}
             styles={{
               control: (base) => ({
@@ -57,9 +56,9 @@ const Home = () => {
             }}
             
           />
-          <p className='text-[15px] font-[700] mt-5'>Describe your Components</p>
-          <textarea className='w-full min-h-[200px] rounded-xl bg-[#09090B] mt-3 p-[10px]' placeholder='Describe your component in Detail...'></textarea>
-          <button className='generate flex items-center p-[15px] rounded-lg border-0 bg-gradient-to-r from-purple-400 via-purple-600 to-pink-500 mt-3 ml-auto min-w-[120px]'>Generate</button>
+          <p className='text-[15px] font-[700] mt-[5px]'>Describe your Components</p>
+          <textarea className='w-full min-h-[200px] rounded-xl bg-[#09090B] mt-[20px] p-[10px]' placeholder='Describe your component in Detail...'></textarea>
+          <button className='generate flex items-center p-[15px] rounded-lg border-0 bg-gradient-to-r from-purple-400 via-purple-600 to-pink-500 mt-[23px] ml-auto min-w-[120px]'>Generate</button>
         </div>
 
         <div className="w-[50%] h-[80vh] bg-[#141319]"></div>
