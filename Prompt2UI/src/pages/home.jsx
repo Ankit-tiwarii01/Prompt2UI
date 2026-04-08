@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Select from "react-select";
 import { BsStars } from "react-icons/bs";
 import { HiOutlineCode } from "react-icons/hi";
+import MonacoEditor from 'react-monaco-editor';
 
 const Home = () => {
   const [outputScreen, setOutputScreen] = useState(false);
@@ -21,7 +22,6 @@ const Home = () => {
       <Navbar />
 
       <div className="flex items-center justify-between px-[100px] gap-[30px]">
-
         {/* LEFT */}
         <div className="w-[50%] py-[30px] rounded-xl bg-[#141319] mt-[5px] p-[20px]">
           <h3 className="text-[25px] font-semibold text-white mt-[10px]">
@@ -56,8 +56,8 @@ const Home = () => {
                 backgroundColor: state.isSelected
                   ? "#333"
                   : state.isFocused
-                  ? "#222"
-                  : "#111",
+                    ? "#222"
+                    : "#111",
                 color: "#fff",
               }),
               singleValue: (base) => ({ ...base, color: "#fff" }),
@@ -92,7 +92,6 @@ const Home = () => {
 
         {/* RIGHT */}
         <div className="w-[50%] h-[80vh] bg-[#141319] rounded-xl overflow-hidden">
-
           {!outputScreen ? (
             <div className="w-full h-full flex items-center justify-center flex-col">
               <div className="w-[70px] h-[70px] flex items-center justify-center text-[30px] rounded-full bg-gradient-to-r from-purple-400 to-purple-600">
@@ -132,11 +131,14 @@ const Home = () => {
 
               {/* Content */}
               <div className="p-5 text-white">
-                {tab === 1 ? <p>Code will appear here...</p> : <p>Preview here...</p>}
+                {tab === 1 ? (
+                  <p>Code will appear here...</p>
+                ) : (
+                  <p>Preview here...</p>
+                )}
               </div>
             </>
           )}
-
         </div>
       </div>
     </>
