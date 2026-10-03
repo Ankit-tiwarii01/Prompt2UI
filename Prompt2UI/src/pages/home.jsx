@@ -5,12 +5,9 @@ import { BsStars } from "react-icons/bs";
 import { HiOutlineCode } from "react-icons/hi";
 import { FiCopy, FiDownload, FiExternalLink, FiSmartphone, FiTablet, FiMonitor, FiClock, FiTrash2, FiX, FiSend } from "react-icons/fi";
 import Editor from "@monaco-editor/react";
-import { GoogleGenAI } from "@google/genai";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const MODEL = import.meta.env.VITE_GEMINI_MODEL || "gemini-3-flash-preview";
 const HISTORY_KEY = "prompt2ui-history";
 const MAX_HISTORY = 20;
 
@@ -41,9 +38,14 @@ const loadHistory = () => {
 };
 
 const askGemini = async (contents) => {
-  const ai = new GoogleGenAI({ apiKey: API_KEY });
-  const response = await ai.models.generateContent({ model: MODEL, contents });
-  return cleanCode(response.text || "");
+  const res = await fetch("/.netlify/functions/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ contents }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Server error (${res.status})`);
+  return cleanCode(data.text || "");
 };
 
 const Home = () => {
@@ -75,10 +77,6 @@ const Home = () => {
 
   const generate = async () => {
     setError("");
-    if (!API_KEY) {
-      setError("API key nahi mili. .env.local me VITE_GEMINI_API_KEY daalo aur server restart karo.");
-      return;
-    }
     if (!prompt.trim()) {
       setError("Pehle component ka description likho.");
       return;
