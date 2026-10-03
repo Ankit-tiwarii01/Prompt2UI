@@ -1,19 +1,17 @@
 import React from 'react'
-import"./App.css"
-import Home from './pages/home';
-import { BrowserRouter, Routes, Route, Link, Outlet } from 'react-router-dom';
+import "./App.css"
+import Home from './pages/home'
+import NoPage from './pages/nopage'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 const App = () => {
   return (
-    <>
     <BrowserRouter>
-      {/* Routes */}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="*" element={<nopage />} />
+        <Route path="*" element={<NoPage />} />
       </Routes>
     </BrowserRouter>
-    </>
   )
 }
 

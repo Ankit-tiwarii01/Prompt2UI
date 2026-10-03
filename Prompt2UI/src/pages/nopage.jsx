@@ -1,9 +1,7 @@
 import React from 'react'
 
-const nopage = () => {
-  return (
-    <div>nopage</div>
-  )
+const NoPage = () => {
+  return <div className="p-10 text-white">404 - Page not found</div>
 }
 
-export default nopage
+export default NoPage
