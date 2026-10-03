@@ -3,12 +3,14 @@ import Navbar from "../components/Navbar";
 import Select from "react-select";
 import { BsStars } from "react-icons/bs";
 import { HiOutlineCode } from "react-icons/hi";
+import { FiCopy, FiDownload, FiExternalLink, FiSmartphone, FiTablet, FiMonitor } from "react-icons/fi";
 import Editor from "@monaco-editor/react";
 import { GoogleGenAI } from "@google/genai";
 import { ClipLoader } from "react-spinners";
+import { toast } from "react-toastify";
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const MODEL = import.meta.env.VITE_GEMINI_MODEL || "gemini-3.5-flash";
+const MODEL = import.meta.env.VITE_GEMINI_MODEL || "gemini-3-flash-preview";
 
 const options = [
   { value: "HTML + CSS", label: "HTML+CSS" },
@@ -16,6 +18,12 @@ const options = [
   { value: "HTML + Bootstrap 5 (use the Bootstrap CDN)", label: "HTML+Bootstrap" },
   { value: "HTML + CSS + JavaScript", label: "HTML+CSS+JS" },
   { value: "HTML + Tailwind CSS + Bootstrap + JavaScript (use CDNs)", label: "HTML+Tailwind+Bootstrap" },
+];
+
+const devices = [
+  { id: "mobile", width: "375px", Icon: FiSmartphone },
+  { id: "tablet", width: "768px", Icon: FiTablet },
+  { id: "desktop", width: "100%", Icon: FiMonitor },
 ];
 
 // Model kabhi-kabhi ```html ... ``` laga deta hai, use hata do
@@ -30,6 +38,7 @@ const Home = () => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [device, setDevice] = useState("desktop");
 
   const generate = async () => {
     setError("");
@@ -57,13 +66,43 @@ Rules:
       setCode(cleanCode(response.text || ""));
       setOutputScreen(true);
       setTab(1);
+      toast.success("Component generated!");
     } catch (e) {
       console.error(e);
       setError(`Generate fail hua: ${e.message || e}`);
+      toast.error("Generate fail hua");
     } finally {
       setLoading(false);
     }
   };
+
+  const copyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      toast.success("Code copied!");
+    } catch {
+      toast.error("Copy nahi ho paya");
+    }
+  };
+
+  const downloadCode = () => {
+    const blob = new Blob([code], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "component.html";
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("File downloaded!");
+  };
+
+  const openInNewTab = () => {
+    const blob = new Blob([code], { type: "text/html" });
+    window.open(URL.createObjectURL(blob), "_blank");
+  };
+
+  const iconBtn =
+    "flex items-center gap-2 px-3 py-2 rounded-lg bg-zinc-800 text-gray-200 hover:bg-zinc-700 transition text-[14px]";
 
   return (
     <>
@@ -131,6 +170,7 @@ Rules:
             </div>
           ) : (
             <>
+              {/* Tabs */}
               <div className="bg-[#17171C] w-full h-[50px] flex items-center gap-3 px-3">
                 {[["Code", 1], ["Preview", 2]].map(([label, n]) => (
                   <button
@@ -143,7 +183,34 @@ Rules:
                 ))}
               </div>
 
-              <div className="w-full h-[calc(80vh-50px)]">
+              {/* Toolbar */}
+              <div className="bg-[#17171C] border-t border-zinc-800 w-full h-[50px] flex items-center justify-between px-3">
+                {tab === 1 ? (
+                  <div className="flex gap-2">
+                    <button onClick={copyCode} className={iconBtn}><FiCopy /> Copy</button>
+                    <button onClick={downloadCode} className={iconBtn}><FiDownload /> Download</button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex gap-2">
+                      {devices.map(({ id, Icon }) => (
+                        <button
+                          key={id}
+                          onClick={() => setDevice(id)}
+                          title={id}
+                          className={`p-2 rounded-lg text-[18px] transition ${device === id ? "bg-purple-600 text-white" : "bg-zinc-800 text-gray-300 hover:bg-zinc-700"}`}
+                        >
+                          <Icon />
+                        </button>
+                      ))}
+                    </div>
+                    <button onClick={openInNewTab} className={iconBtn}><FiExternalLink /> New tab</button>
+                  </>
+                )}
+              </div>
+
+              {/* Content */}
+              <div className="w-full h-[calc(80vh-100px)]">
                 {tab === 1 ? (
                   <Editor
                     height="100%"
@@ -154,7 +221,14 @@ Rules:
                     options={{ minimap: { enabled: false }, fontSize: 14, wordWrap: "on" }}
                   />
                 ) : (
-                  <iframe title="preview" srcDoc={code} className="w-full h-full bg-white" />
+                  <div className="w-full h-full flex justify-center bg-zinc-900 overflow-auto">
+                    <iframe
+                      title="preview"
+                      srcDoc={code}
+                      style={{ width: devices.find((d) => d.id === device).width }}
+                      className="h-full bg-white max-w-full transition-all"
+                    />
+                  </div>
                 )}
               </div>
             </>

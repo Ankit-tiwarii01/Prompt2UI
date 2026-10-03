@@ -3,6 +3,7 @@ import "./App.css"
 import Home from './pages/home'
 import NoPage from './pages/nopage'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NoPage />} />
       </Routes>
+      <ToastContainer position="top-right" theme="dark" autoClose={2000} />
     </BrowserRouter>
   )
 }
